@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VidGetter - Free Video Downloader</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="icon" href="{{ url_for('static', filename='favicon.png') }}" type="image/png">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+        crossorigin="anonymous" referrerpolicy>
+    <script src="{{ url_for('static', filename='scripts/tailwindconfig.js') }}"></script>
+</head>
+
+<body
+    class="min-h-screen bg-gradient-to-br from-gray-100 to-gray-300 dark:from-dark-200 dark:to-dark-100 p-8 transition-colors duration-200">
+    <div class="max-w-3xl mx-auto">
+        <nav class="mb-12 flex justify-between items-center">
+            <a href="/" class="text-2xl font-bold text-gray-800 dark:text-white">VidGetter</a>
+            <div class="hidden md:flex items-center space-x-4">
+                <a href="#supported-sites"
+                    class="text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-white">Supported
+                    Sites</a>
+                <a href="#faq"
+                    class="text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-white">FAQ</a>
+                <a href="#"
+                    class="text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-white">Github</a>
+                <a href="#" class="text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-white">Blog</a>
+                <label class="theme-switch">
+                    <input type="checkbox" id="theme-toggle">
+                    <span class="slider">
+                        <i class="fas fa-moon"></i>
+                        <i class="fas fa-sun"></i>
+                    </span>
+                </label>
+            </div>
+            <button id="mobile-menu-button"
+                class="md:hidden text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-white">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+            </button>
+        </nav>
+        <div id="mobile-menu" class="hidden md:hidden mt-4 mb-8">
+            <a href="#supported-sites"
+                class="block py-2 text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-white">Supported
+                Sites</a>
+            <a href="#faq"
+                class="block py-2 text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-white">FAQ</a>
+            <a href="#"
+                class="block py-2 text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-white">Github</a>
+            <a href="#"
+                class="block py-2 text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-white">Blog</a>
+            <label class="theme-switch mt-2">
+                <input type="checkbox" id="mobile-theme-toggle">
+                <span class="slider">
+                    <i class="fas fa-moon"></i>
+                    <i class="fas fa-sun"></i>
+                </span>
+            </label>
+        </div>
+
+        <div class="mb-12 mt-20 text-center">
+            <h2 class="text-4xl font-bold text-gray-800 dark:text-white mb-4">Free Video Downloader</h2>
+            <p class="text-xl text-gray-600 dark:text-gray-400 mb-8">Download videos from YouTube, TikTok, Instagram,
+                9gag, and more!</p>
+
+            <div class="step-container">
+                <div class="step" id="paste-link-step">
+                    <div class="step-number">1</div>
+                    <i class="fa-solid fa-link step-icon"></i>
+                    <div class="step-text">PASTE LINK</div>
+                </div>
+                <div class="step" id="click-fetch-step">
+                    <div class="step-number">2</div>
+                    <i class="fa-solid fa-download step-icon"></i>
+                    <div class="step-text">CLICK FETCH</div>
+                </div>
+                <div class="step" id="get-video-step">
+                    <div class="step-number">3</div>
+                    <i class="fa-solid fa-video step-icon"></i>
+                    <div class="step-text">GET VIDEO</div>
+                </div>
+            </div>
+        </div>
+
+        <form id="url-form" class="mb-8">
+            <div class="flex items-stretch bg-white dark:bg-dark-300 rounded-lg shadow-md overflow-hidden">
+                <input type="text" id="url-input" placeholder="Enter video URL"
+                    class="flex-grow px-4 py-3 bg-transparent text-gray-800 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none">
+                <button type="submit" id="submit-btn"
+                    class="w-14 md:w-auto bg-blue-500 text-white flex items-center justify-center px-4 py-3 hover:bg-blue-600 transition duration-300 ease-in-out">
+                    <i class="fas fa-download md:mr-2"></i>
+                    <span class="hidden md:inline">Download</span>
+                </button>
+            </div>
+        </form>
+
+
+        <div id="alert" class="mb-8 hidden">
+            <div class="bg-red-100 dark:bg-red-900 border border-red-400 dark:border-red-700 text-red-700 dark:text-red-200 px-4 py-3 rounded relative"
+                role="alert">
+                <strong class="font-bold">Error!</strong>
+                <span id="error-message" class="block sm:inline"></span>
+            </div>
+        </div>
+
+        <div id="loading" class="hidden flex justify-center items-center mb-8">
+            <div class="spinner"></div>
+        </div>
+
+        <div id="video-info" class="bg-white dark:bg-dark-300 rounded-lg shadow-lg overflow-hidden">
+            <!-- Video info will be inserted here -->
+        </div>
+    </div>
+    <div class="max-w-3xl mx-auto mt-16">
+        <h2 class="text-3xl font-bold text-gray-800 dark:text-white mb-8">What is VidGetter?</h2>
+        <p class="text-gray-600 dark:text-gray-400 mb-12 text-[17px] mx-auto"
+            style="max-width: 800px; text-align: left;">
+            VidGetter is a tool that allows you to download videos from several websites at the highest possible
+            quality. VidGetter allows you to download unlimited videos from several sites such as Youtube, Rumble,
+            Instagram, Tiktok, Vimeo and thousands other sites without installing anything on your device. We support
+            several video formats such as MP4, WEBM, FLV etc. Best of all is that it's completely free and no
+            registration is required.
+        </p>
+
+        <h2 class="text-3xl font-bold text-gray-800 dark:text-white mb-8">Features</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div
+                class="bg-white dark:bg-dark-300 p-8 rounded-lg shadow-md flex flex-col items-center justify-between h-64">
+                <div class="mb-4">
+                    <i class="fas fa-user text-5xl text-blue-500"></i>
+                </div>
+                <h3 class="text-xl font-semibold text-gray-800 dark:text-white mb-2 text-center">No Registration
+                    Required</h3>
+                <p class="text-gray-600 dark:text-gray-400 text-center">No registration is needed to use the tool to
+                    download videos</p>
+            </div>
+            <div
+                class="bg-white dark:bg-dark-300 p-8 rounded-lg shadow-md flex flex-col items-center justify-between h-64">
+                <div class="mb-4">
+                    <i class="fas fa-mobile-alt text-5xl text-blue-500"></i>
+                </div>
+                <h3 class="text-xl font-semibold text-gray-800 dark:text-white mb-2 text-center">Mobile Friendly</h3>
+                <p class="text-gray-600 dark:text-gray-400 text-center">Works on every mobile device that supports
+                    JavaScript</p>
+            </div>
+            <div
+                class="bg-white dark:bg-dark-300 p-8 rounded-lg shadow-md flex flex-col items-center justify-between h-64">
+                <div class="mb-4">
+                    <i class="fas fa-globe text-5xl text-blue-500"></i>
+                </div>
+                <h3 class="text-xl font-semibold text-gray-800 dark:text-white mb-2 text-center">Browser Compatibility
+                </h3>
+                <p class="text-gray-600 dark:text-gray-400 text-center">Compatible with Firefox, Chrome, Edge, Safari
+                    etc</p>
+            </div>
+            <div
+                class="bg-white dark:bg-dark-300 p-8 rounded-lg shadow-md flex flex-col items-center justify-between h-64">
+                <div class="mb-4">
+                    <i class="fas fa-network-wired text-5xl text-blue-500"></i>
+                </div>
+                <h3 class="text-xl font-semibold text-gray-800 dark:text-white mb-2 text-center">Over 1000+ websites
+                </h3>
+                <p class="text-gray-600 dark:text-gray-400 text-center">VidGetter supports downloading videos from
+                    multiple websites.</p>
+            </div>
+            <div
+                class="bg-white dark:bg-dark-300 p-8 rounded-lg shadow-md flex flex-col items-center justify-between h-64">
+                <div class="mb-4">
+                    <i class="fas fa-bolt text-5xl text-blue-500"></i>
+                </div>
+                <h3 class="text-xl font-semibold text-gray-800 dark:text-white mb-2 text-center">Fast link retrieval
+                </h3>
+                <p class="text-gray-600 dark:text-gray-400 text-center">VidGetter gets your videos at fast speeds.</p>
+            </div>
+            <div
+                class="bg-white dark:bg-dark-300 p-8 rounded-lg shadow-md flex flex-col items-center justify-between h-64">
+                <div class="mb-4">
+                    <i class="fas fa-infinity text-5xl text-blue-500"></i>
+                </div>
+                <h3 class="text-xl font-semibold text-gray-800 dark:text-white mb-2 text-center">Unlimited Downloads
+                </h3>
+                <p class="text-gray-600 dark:text-gray-400 text-center">There is no limit to the number of videos you
+                    can download</p>
+            </div>
+        </div>
+
+        <div id="faq" class="max-w-3xl mx-auto mt-16">
+            <h2 class="text-3xl font-bold text-gray-800 dark:text-white mb-8">FAQs</h2>
+
+            <div class="space-y-4">
+                <div class="faq-item bg-white dark:bg-dark-300 rounded-lg shadow-md overflow-hidden">
+                    <button
+                        class="faq-question w-full text-left p-4 focus:outline-none flex items-center justify-between">
+                        <h3 class="text-lg font-semibold text-gray-800 dark:text-white">Is Downloading From VidGetter
+                            Legal?</h3>
+                        <svg class="w-5 h-5 transform transition-transform duration-200" fill="none"
+                            stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7">
+                            </path>
+                        </svg>
+                    </button>
+                    <div class="faq-answer hidden p-4 text-gray-600 dark:text-gray-400">
+                        <p>VidGetter does not host or store copyright content on its servers. All download links for
+                            videos are retrieved from where they are hosted and presented to our users.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item bg-white dark:bg-dark-300 rounded-lg shadow-md overflow-hidden">
+                    <button
+                        class="faq-question w-full text-left p-4 focus:outline-none flex items-center justify-between">
+                        <h3 class="text-lg font-semibold text-gray-800 dark:text-white">What is the quality of the video
+                            that I download?</h3>
+                        <svg class="w-5 h-5 transform transition-transform duration-200" fill="none"
+                            stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7">
+                            </path>
+                        </svg>
+                    </button>
+                    <div class="faq-answer hidden p-4 text-gray-600 dark:text-gray-400">
+                        <p>The quality of the video depends on how it was uploaded on the site you want to download it
+                            from. VidGetter presents all the possibility video qualities, from low to high.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item bg-white dark:bg-dark-300 rounded-lg shadow-md overflow-hidden">
+                    <button
+                        class="faq-question w-full text-left p-4 focus:outline-none flex items-center justify-between">
+                        <h3 class="text-lg font-semibold text-gray-800 dark:text-white">Some videos are playing instead
+                            of downloading</h3>
+                        <svg class="w-5 h-5 transform transition-transform duration-200" fill="none"
+                            stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7">
+                            </path>
+                        </svg>
+                    </button>
+                    <div class="faq-answer hidden p-4 text-gray-600 dark:text-gray-400">
+                        <p>Right-click the download button, click Save Link As, rename the video and click save.</p>
+                    </div>
+                </div>
+
+
+                <div class="faq-item bg-white dark:bg-dark-300 rounded-lg shadow-md overflow-hidden">
+                    <button
+                        class="faq-question w-full text-left p-4 focus:outline-none flex items-center justify-between">
+                        <h3 class="text-lg font-semibold text-gray-800 dark:text-white">Some videos are not downloading,
+                            why?</h3>
+                        <svg class="w-5 h-5 transform transition-transform duration-200" fill="none"
+                            stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7">
+                            </path>
+                        </svg>
+                    </button>
+                    <div class="faq-answer hidden p-4 text-gray-600 dark:text-gray-400">
+                        <p>It could be that your VPN or ISP is blocking those sites. Some sites also have IP address
+                            checks in place to make sure that the download link is only available to the user that
+                            requested it. Since it's our server that makes the requests, there is not much we can do
+                            about that. </p>
+                    </div>
+                </div>
+
+                <!-- Add more FAQ items as needed -->
+
+            </div>
+        </div>
+
+
+
+        <div id="supported-sites" class="max-w-3xl mx-auto mt-16">
+            <h2 class="text-3xl font-bold text-gray-800 dark:text-white mb-8">Supported Sites</h2>
+
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                <div class="bg-gray-200 dark:bg-dark-300 p-4 rounded-lg flex flex-col items-center justify-center">
+                    <img src="{{ url_for('static', filename='images/youtube.svg') }}" alt="YouTube"
+                        class="w-12 h-12 mb-2">
+                    <span class="text-sm font-medium text-gray-800 dark:text-white">YouTube</span>
+                </div>
+                <div class="bg-gray-200 dark:bg-dark-300 p-4 rounded-lg flex flex-col items-center justify-center">
+                    <img src="{{ url_for('static', filename='images/instagram.svg') }}" alt="Instagram"
+                        class="w-12 h-12 mb-2">
+                    <span class="text-sm font-medium text-gray-800 dark:text-white">Instagram</span>
+                </div>
+                <div class="bg-gray-200 dark:bg-dark-300 p-4 rounded-lg flex flex-col items-center justify-center">
+                    <img src="{{ url_for('static', filename='images/twitter.svg') }}" alt="Twitter"
+                        class="w-12 h-12 mb-2">
+                    <span class="text-sm font-medium text-gray-800 dark:text-white">Twitter</span>
+                </div>
+                <div class="bg-gray-200 dark:bg-dark-300 p-4 rounded-lg flex flex-col items-center justify-center">
+                    <img src="{{ url_for('static', filename='images/tiktok.svg') }}" alt="TikTok"
+                        class="w-12 h-12 mb-2">
+                    <span class="text-sm font-medium text-gray-800 dark:text-white">TikTok</span>
+                </div>
+                <div class="bg-gray-200 dark:bg-dark-300 p-4 rounded-lg flex flex-col items-center justify-center">
+                    <img src="{{ url_for('static', filename='images/vimeo.svg') }}" alt="Vimeo" class="w-12 h-12 mb-2">
+                    <span class="text-sm font-medium text-gray-800 dark:text-white">Vimeo</span>
+                </div>
+                <div class="bg-gray-200 dark:bg-dark-300 p-4 rounded-lg flex flex-col items-center justify-center">
+                    <img src="{{ url_for('static', filename='images/dailymotion.svg') }}" alt="Dailymotion"
+                        class="w-12 h-12 mb-2">
+                    <span class="text-sm font-medium text-gray-800 dark:text-white">Dailymotion</span>
+                </div>
+                <div class="bg-gray-200 dark:bg-dark-300 p-4 rounded-lg flex flex-col items-center justify-center">
+                    <img src="{{ url_for('static', filename='images/9gag.svg') }}" alt="9gag" class="w-12 h-12 mb-2">
+                    <span class="text-sm font-medium text-gray-800 dark:text-white">9gag</span>
+                </div>
+                <div class="bg-gray-200 dark:bg-dark-300 p-4 rounded-lg flex flex-col items-center justify-center">
+                    <img src="{{ url_for('static', filename='images/soundcloud.svg') }}" alt="Soundcloud"
+                        class="w-12 h-12 mb-2">
+                    <span class="text-sm font-medium text-gray-800 dark:text-white">Soundcloud</span>
+                </div>
+                <div class="bg-gray-200 dark:bg-dark-300 p-4 rounded-lg flex flex-col items-center justify-center">
+                    <img src="{{ url_for('static', filename='images/vk.svg') }}" alt="VK" class="w-12 h-12 mb-2">
+                    <span class="text-sm font-medium text-gray-800 dark:text-white">VK</span>
+                </div>
+                <div class="bg-gray-200 dark:bg-dark-300 p-4 rounded-lg flex flex-col items-center justify-center">
+                    <img src="{{ url_for('static', filename='images/tumblr.svg') }}" alt="Tumblr"
+                        class="w-12 h-12 mb-2">
+                    <span class="text-sm font-medium text-gray-800 dark:text-white">Tumblr</span>
+                </div>
+            </div>
+        </div>
+        <footer class="mt-16 py-8 border-t border-gray-200 dark:border-gray-700">
+            <div class="max-w-3xl mx-auto px-4">
+                <div class="flex flex-col md:flex-row justify-between items-center">
+                    <div class="mb-4 md:mb-0">
+                        <h2 class="text-2xl font-bold text-gray-800 dark:text-white">VidGetter</h2>
+                    </div>
+                    <nav class="flex flex-wrap justify-center md:justify-end">
+                        <a href="#"
+                            class="text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-white mx-3 my-2">Contact</a>
+                        <a href="#"
+                            class="text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-white mx-3 my-2">Terms
+                            of service</a>
+                        <a href="#"
+                            class="text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-white mx-3 my-2">About</a>
+                        <a href="#"
+                            class="text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-white mx-3 my-2">Cookies</a>
+                    </nav>
+                </div>
+                <div class="mt-8 text-center text-gray-500 dark:text-gray-400 text-sm">
+                    &copy; 2023 VidGetter. All rights reserved.
+                </div>
+            </div>
+        </footer>
+
+    </div>
+
+    <script src="{{ url_for('static', filename='scripts/script.js') }}"></script>
+</body>
+
+</html>
